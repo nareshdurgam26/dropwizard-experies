@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = 'com.goldman.reststub.RestStubApp'
+
+// tag::repositories[]
+repositories { 
+    mavenCentral() 
+}
+// end::repositories[]
+
+// tag::jar[]
+jar {
+    archiveBaseName = 'gs-gradle'
+    archiveVersion =  '0.1.0'
+}
+
+run {
+    args = ['server', 'config.yml']
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.goldman.reststub.RestStubApp"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+// end::jar[]
+
+// tag::dependencies[]
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation "joda-time:joda-time:2.2"
+    implementation "io.dropwizard:dropwizard-core:2.0.28"
+    //compile "joda-time:joda-time:2.2"
+    testImplementation "junit:junit:4.12"
+}
+
+// end::dependencies[]
+
+// tag::wrapper[]
+// end::wrapper[]
